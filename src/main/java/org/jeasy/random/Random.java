@@ -17,10 +17,10 @@ import java.lang.annotation.*;
  *  &#064;Random private DomainObject fullyPopulatedDomainObject;
  *
  *  // create a List containing the default size of randomly generated instances of String
- *  &#064;Random List<String> anyStrings;
+ *  &#064;Random List&lt;String&gt; anyStrings;
  *
  *  // create a Stream containing two randomly generated instances of MyDomainObject
- *  &#064;Random(size = 2) Stream<MyDomainObject> anyStrings;
+ *  &#064;Random(size = 2) Stream&lt;MyDomainObject&gt; anyStrings;
  * </pre>
  *
  * @author Random Beans

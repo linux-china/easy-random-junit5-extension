@@ -40,10 +40,10 @@ import static org.junit.platform.commons.support.AnnotationSupport.isAnnotated;
  *     private String anyString;
  *
  *     &#064;Random(excluded = {"name", "value"})
- *     private List<DomainObject> anyPartiallyPopulatedDomainObject;
+ *     private List&lt;DomainObject&gt; anyPartiallyPopulatedDomainObject;
  *
  *     &#064;Random(type = DomainObject.class)
- *     private List<DomainObject> anyDomainObjects;
+ *     private List&lt;DomainObject&gt; anyDomainObjects;
  *
  *     &#064;Test
  *     public void testUsingRandomString() {
@@ -83,7 +83,7 @@ import static org.junit.platform.commons.support.AnnotationSupport.isAnnotated;
  *
  *     &#064;Test
  *     &#064;ExtendWith(EasyRandomExtension.class)
- *     public void testUsingRandomDomainObjects(&#064;Random List<DomainObject> anyDomainObjects) {
+ *     public void testUsingRandomDomainObjects(&#064;Random List&lt;DomainObject&gt; anyDomainObjects) {
  *         // use the injected anyDomainObjects
  *         // the anyDomainObjects will contain _N_ fully populated random instances of DomainObject
  *         // ...

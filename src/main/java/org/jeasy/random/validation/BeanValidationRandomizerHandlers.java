@@ -16,6 +16,7 @@ import java.util.Map;
 /**
  * Java Validation annotations handlers for parameter and field
  *
+ * @author Random Beans
  * @author linux_china
  */
 public class BeanValidationRandomizerHandlers {

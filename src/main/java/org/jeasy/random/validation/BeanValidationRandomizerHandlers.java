@@ -1,12 +1,12 @@
 package org.jeasy.random.validation;
 
+import net.bytebuddy.ByteBuddy;
 import org.jeasy.random.EasyRandomParameters;
 import org.jeasy.random.api.Randomizer;
 import org.jeasy.random.util.ReflectionUtils;
 
 import javax.validation.constraints.*;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
@@ -50,7 +50,7 @@ public class BeanValidationRandomizerHandlers {
             Class<? extends Annotation> annotation = entry.getKey();
             BeanValidationAnnotationHandler annotationHandler = entry.getValue();
             if (param.isAnnotationPresent(annotation) && annotationHandler != null) {
-                final Field field = mockField(param.getName(), param.getType());
+                final Field field = mockField(param.getName(), param.getType(), param.getAnnotations());
                 if (field != null) {
                     return annotationHandler.getRandomizer(field);
                 }
@@ -71,12 +71,16 @@ public class BeanValidationRandomizerHandlers {
         return null;
     }
 
-    private Field mockField(String name, Class<?> type) {
+    private Field mockField(String name, Class<?> type, Annotation[] annotations) {
         try {
-            @SuppressWarnings("unchecked")
-            Constructor<Field> constructor = (Constructor<Field>) Field.class.getDeclaredConstructors()[0];
-            constructor.setAccessible(true);
-            return constructor.newInstance(Object.class, name, type, 0, 0, null, null);
+            final Class<?> clazz = new ByteBuddy()
+                    .subclass(Object.class)
+                    .defineField(name, type)
+                    .annotateField(annotations)
+                    .make()
+                    .load(this.getClass().getClassLoader())
+                    .getLoaded();
+            return clazz.getDeclaredField(name);
         } catch (Exception e) {
             e.printStackTrace();
         }

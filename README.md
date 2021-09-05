@@ -8,6 +8,19 @@ The easy random extension provides a test with randomly generated objects, inclu
 * Generic collections: List/Set/Stream/Array
 * Java Validation annotations: @Email, @Pattern etc
 
+# How to use?
+
+Include following dependency in your pom.xml
+
+```xml
+  <dependency>
+    <groupId>org.mvnsearch</groupId>
+    <artifactId>easy-random-junit5-extension</artifactId>
+    <version>0.1.0</version>
+    <scope>test</scope>
+  </dependency>
+```
+
 # Usage examples:
 
 * Injecting random values as fields:

@@ -32,12 +32,9 @@ Include following dependency in your pom.xml
        @Random
        private String anyString;
   
-       @Random(excluded = {"name", "value"})
-       private List  anyPartiallyPopulatedDomainObject;
-  
-       @Random(type = DomainObject.class)
-       private List  anyDomainObjects;
-  
+       @Random
+       private List<DomainObject> domainObjectList;
+       
        @Test
        public void testUsingRandomString() {
            // use the injected anyString

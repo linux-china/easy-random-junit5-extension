@@ -63,8 +63,7 @@ public class BeanValidationRandomizerHandlers {
         for (Map.Entry<Class<? extends Annotation>, BeanValidationAnnotationHandler> entry : annotationHandlers.entrySet()) {
             Class<? extends Annotation> annotation = entry.getKey();
             BeanValidationAnnotationHandler annotationHandler = entry.getValue();
-            if (ReflectionUtils
-                    .isAnnotationPresent(field, annotation) && annotationHandler != null) {
+            if (ReflectionUtils.isAnnotationPresent(field, annotation) && annotationHandler != null) {
                 return annotationHandler.getRandomizer(field);
             }
         }

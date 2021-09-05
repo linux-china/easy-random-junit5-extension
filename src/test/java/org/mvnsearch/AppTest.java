@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -32,5 +33,10 @@ public class AppTest {
     @Test
     public void testRandomUserList(@Random(size = 5) List<User> users) {
         assertThat(users).hasSize(5);
+    }
+
+    @Test
+    public void testRandomFullName(@Random @Pattern(regexp = "[A-Z][a-z]{6} [A-Z][a-z]{4}") String fullName) {
+        assertThat(fullName).hasSize(13).contains(" ");
     }
 }

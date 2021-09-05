@@ -26,6 +26,9 @@ Include following dependency in your pom.xml
 * Injecting random values as fields:
 
 ```java
+   import org.jeasy.random.EasyRandomExtension;
+   import org.jeasy.random.Random;
+
    @ExtendWith(EasyRandomExtension.class)
    public class MyTest {
   

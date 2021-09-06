@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Positive;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -16,13 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(EasyRandomExtension.class)
 public class AppTest {
     @Random
-    @Email
-    private String email;
+    private List<User> users;
 
     @Test
-    public void shouldAnswerWithTrue(@Random @Positive int value) {
-        assertThat(value).isGreaterThan(0);
-        assertThat(email).contains("@");
+    public void testRandomEmail(@Random @Email String email) {
     }
 
     @Test

@@ -2,6 +2,7 @@ package org.mvnsearch;
 
 
 import com.github.javafaker.Address;
+import com.github.javafaker.Name;
 import org.jeasy.random.EasyRandomExtension;
 import org.jeasy.random.Random;
 import org.junit.jupiter.api.Test;
@@ -33,8 +34,13 @@ public class AppTest {
     }
 
     @Test
-    public void testAddress(@Random(locale = "zh_CN") Address address){
+    public void testAddress(@Random(locale = "zh_CN") Address address) {
         System.out.println(address.cityName());
+    }
+
+    @Test
+    public void testName(@Random(locale = "zh_CN") Name name) {
+        System.out.println(name.fullName());
     }
 
     @Test

@@ -6,6 +6,7 @@ The easy random extension provides a test with randomly generated objects, inclu
 * JDK types: int/double/BigDecimal/boolean/String etc
 * Custom types: POJO, [except for records support](https://github.com/j-easy/easy-random/issues/397)
 * Generic collections: List/Set/Stream/Array
+* Java Faker support: Name, Internet, Address etc
 * Java Validation annotations: @Email, @Pattern etc
 * Custom Annotation with Validation annotation, such as @Phone
 

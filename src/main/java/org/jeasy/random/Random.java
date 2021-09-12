@@ -44,4 +44,6 @@ public @interface Random {
      * @return the type of a randomly generated generic collection
      */
     Class<?> type() default Object.class;
+
+    String locale() default "en_US";
 }

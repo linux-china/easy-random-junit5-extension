@@ -7,6 +7,17 @@ The easy random extension provides a test with randomly generated objects, inclu
 * Custom types: POJO, [except for records support](https://github.com/j-easy/easy-random/issues/397)
 * Generic collections: List/Set/Stream/Array
 * Java Validation annotations: @Email, @Pattern etc
+* Custom Annotation with Validation annotation, such as @Phone
+
+```java
+@Documented
+@Constraint(validatedBy = {})
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
+@Retention(RUNTIME)
+@Pattern(regexp = "(136|137|186)\\d{8}")
+public @interface Phone {
+}
+```
 
 # How to use?
 

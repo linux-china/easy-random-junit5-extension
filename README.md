@@ -8,14 +8,14 @@ The easy random extension provides a test with randomly generated objects, inclu
 * Generic collections: List/Set/Stream/Array
 * Java Faker support: Name, Internet, Address etc
 * Java Validation annotations: @Email, @Pattern etc
-* Custom Annotation with Validation annotation, such as @Phone
+* Custom Annotation with Validation annotation, such as @Phone. For more https://any86.github.io/any-rule/
 
 ```java
 @Documented
 @Constraint(validatedBy = {})
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
-@Pattern(regexp = "(136|137|186)\\d{8}")
+@Pattern(regexp = "^1[3-9]\\d{9}$")
 public @interface Phone {
 }
 ```

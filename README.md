@@ -20,6 +20,17 @@ public @interface Phone {
 }
 ```
 
+* i18n friendly to Faker's types
+
+```groovy
+import com.github.javafaker.Address  
+  
+@Test
+public void testAddress(@Random(locale = "zh_CN") Address address) {
+  System.out.println(address.cityName());
+}
+```
+
 # How to use?
 
 Include following dependency in your pom.xml

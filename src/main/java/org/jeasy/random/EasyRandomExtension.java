@@ -1,16 +1,12 @@
 package org.jeasy.random;
 
+import com.github.javafaker.Faker;
 import org.jeasy.random.api.Randomizer;
 import org.jeasy.random.validation.BeanValidationRandomizerHandlers;
 import org.junit.jupiter.api.extension.*;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.*;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -98,12 +94,27 @@ public class EasyRandomExtension implements TestInstancePostProcessor, Parameter
 
     private final EasyRandom easyRandom;
     private final BeanValidationRandomizerHandlers beanValidationHandlers;
+    /**
+     * faker type handlers
+     */
+    private final Map<Class<?>, Method> fakerTypeHandlers = new HashMap<>();
+    /**
+     * i18n faker map
+     */
+    private final Map<String, Faker> fakerI18nMap = new HashMap<>();
 
     public EasyRandomExtension() {
         EasyRandomParameters parameters = new EasyRandomParameters();
         easyRandom = new EasyRandom(parameters);
         beanValidationHandlers = new BeanValidationRandomizerHandlers();
         beanValidationHandlers.init(parameters);
+        // init Faker
+        for (Method method : Faker.class.getMethods()) {
+            final Package typePackage = method.getReturnType().getPackage();
+            if (typePackage != null && typePackage.getName().equals("com.github.javafaker")) {
+                fakerTypeHandlers.put(method.getReturnType(), method);
+            }
+        }
     }
 
     public EasyRandomExtension(EasyRandomParameters parameters) {
@@ -142,6 +153,9 @@ public class EasyRandomExtension implements TestInstancePostProcessor, Parameter
     public Object resolveParameter(ParameterContext parameterContext,
                                    ExtensionContext extensionContext) throws ParameterResolutionException {
         final Parameter parameter = parameterContext.getParameter();
+        if (fakerTypeHandlers.containsKey(parameter.getType())) {
+            return fakeValue(parameter.getAnnotation(Random.class), parameter.getType());
+        }
         if (parameter.getAnnotations().length > 1) {
             final Randomizer<?> randomizer = beanValidationHandlers.getRandomizer(parameter);
             if (randomizer != null) {
@@ -164,12 +178,16 @@ public class EasyRandomExtension implements TestInstancePostProcessor, Parameter
         for (Field field : testInstance.getClass().getDeclaredFields()) {
             if (isAnnotated(field, Random.class)) {
                 Random annotation = field.getAnnotation(Random.class);
-                final Randomizer<?> randomizer = beanValidationHandlers.getRandomizer(field);
                 Object randomObject;
-                if (randomizer != null) {
-                    randomObject = randomizer.getRandomValue();
+                if (fakerTypeHandlers.containsKey(field.getType())) {
+                    randomObject = fakeValue(field.getAnnotation(Random.class), field.getType());
                 } else {
-                    randomObject = resolve(field.getGenericType(), field.getType(), annotation);
+                    final Randomizer<?> randomizer = beanValidationHandlers.getRandomizer(field);
+                    if (randomizer != null) {
+                        randomObject = randomizer.getRandomValue();
+                    } else {
+                        randomObject = resolve(field.getGenericType(), field.getType(), annotation);
+                    }
                 }
                 field.setAccessible(true);
                 field.set(testInstance, randomObject);
@@ -237,5 +255,21 @@ public class EasyRandomExtension implements TestInstancePostProcessor, Parameter
             inferredClass = (Class<?>) genericType;
         }
         return inferredClass == null ? defaultClass : inferredClass;
+    }
+
+    public Object fakeValue(Random random, Class<?> fakeType) {
+        // faker checker
+        final Method handler = fakerTypeHandlers.get(fakeType);
+        try {
+            String locale = random.locale();
+            if (!fakerI18nMap.containsKey(locale)) {
+                final String[] parts = locale.split("[_\\-]+");
+                Locale temp = parts.length > 1 ? new Locale(parts[0], parts[1]) : new Locale(parts[0]);
+                fakerI18nMap.put(locale, new Faker(temp));
+            }
+            return handler.invoke(fakerI18nMap.get(locale));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

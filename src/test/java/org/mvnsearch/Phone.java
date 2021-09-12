@@ -13,6 +13,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = {})
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
-@Pattern(regexp = "(136|137|186)\\d{8}")
+@Pattern(regexp = "^1[3-9]\\d{9}$")
 public @interface Phone {
 }

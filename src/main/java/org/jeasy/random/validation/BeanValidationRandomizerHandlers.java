@@ -3,10 +3,10 @@ package org.jeasy.random.validation;
 import net.bytebuddy.ByteBuddy;
 import org.jeasy.random.EasyRandomParameters;
 import org.jeasy.random.api.Randomizer;
-import org.jeasy.random.util.ReflectionUtils;
 
 import javax.validation.constraints.*;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
@@ -49,8 +49,9 @@ public class BeanValidationRandomizerHandlers {
         for (Map.Entry<Class<? extends Annotation>, BeanValidationAnnotationHandler> entry : annotationHandlers.entrySet()) {
             Class<? extends Annotation> annotation = entry.getKey();
             BeanValidationAnnotationHandler annotationHandler = entry.getValue();
-            if (param.isAnnotationPresent(annotation) && annotationHandler != null) {
-                final Field field = mockField(param.getName(), param.getType(), param.getAnnotations());
+            final Annotation validationAnnotation = getValidationAnnotation(param, annotation);
+            if (validationAnnotation != null && annotationHandler != null) {
+                final Field field = mockField(param.getName(), param.getType(), validationAnnotation);
                 if (field != null) {
                     return annotationHandler.getRandomizer(field);
                 }
@@ -63,19 +64,21 @@ public class BeanValidationRandomizerHandlers {
         for (Map.Entry<Class<? extends Annotation>, BeanValidationAnnotationHandler> entry : annotationHandlers.entrySet()) {
             Class<? extends Annotation> annotation = entry.getKey();
             BeanValidationAnnotationHandler annotationHandler = entry.getValue();
-            if (ReflectionUtils.isAnnotationPresent(field, annotation) && annotationHandler != null) {
-                return annotationHandler.getRandomizer(field);
+            final Annotation validationAnnotation = getValidationAnnotation(field, annotation);
+            if (validationAnnotation != null && annotationHandler != null) {
+                final Field field2 = mockField(field.getName(), field.getType(), validationAnnotation);
+                return annotationHandler.getRandomizer(field2);
             }
         }
         return null;
     }
 
-    private Field mockField(String name, Class<?> type, Annotation[] annotations) {
+    private Field mockField(String name, Class<?> type, Annotation validationAnnotation) {
         try {
             final Class<?> clazz = new ByteBuddy()
                     .subclass(Object.class)
                     .defineField(name, type)
-                    .annotateField(annotations)
+                    .annotateField(validationAnnotation)
                     .make()
                     .load(this.getClass().getClassLoader())
                     .getLoaded();
@@ -86,5 +89,17 @@ public class BeanValidationRandomizerHandlers {
         return null;
     }
 
+
+    private Annotation getValidationAnnotation(AnnotatedElement element, Class<? extends Annotation> annotationClass) {
+        for (Annotation elementAnnotation : element.getAnnotations()) {
+            final Class<? extends Annotation> annotationType = elementAnnotation.annotationType();
+            if (annotationType == annotationClass) {
+                return elementAnnotation;
+            } else if (annotationType.isAnnotationPresent(annotationClass)) {
+                return annotationType.getAnnotation(annotationClass);
+            }
+        }
+        return null;
+    }
 
 }

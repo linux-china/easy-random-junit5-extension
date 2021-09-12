@@ -111,7 +111,10 @@ public class EasyRandomExtension implements TestInstancePostProcessor, Parameter
         // init Faker
         for (Method method : Faker.class.getMethods()) {
             final Package typePackage = method.getReturnType().getPackage();
-            if (typePackage != null && typePackage.getName().equals("com.github.javafaker")) {
+            if (typePackage != null
+                    && typePackage.getName().equals("com.github.javafaker")
+                    && method.getParameterCount() == 0
+            ) {
                 fakerTypeHandlers.put(method.getReturnType(), method);
             }
         }

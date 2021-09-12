@@ -33,7 +33,7 @@ public class AppTest {
     }
 
     @Test
-    public void testAddress(@Random Address address){
+    public void testAddress(@Random(locale = "zh_CN") Address address){
         System.out.println(address.cityName());
     }
 

@@ -16,9 +16,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AppTest {
     @Random
     private List<User> users;
+    @Random
+    @Phone
+    private String phone2;
+
 
     @Test
     public void testRandomEmail(@Random @Email String email) {
+        System.out.println(email);
+    }
+
+    @Test
+    public void testPhone(@Random @Phone String phone) {
+
     }
 
     @Test

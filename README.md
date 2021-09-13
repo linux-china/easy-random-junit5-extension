@@ -1,5 +1,16 @@
-Easy Random JUnit 5 Extension
-=============================
+<div align="center">
+    <b><em>Easy Random/Faker JUnit 5 extension</em></b><br>
+    The simple, stupid random Java&trade; beans generator for JUnit 5
+</div>
+
+<div align="center">
+
+[![MIT license](https://img.shields.io/badge/license-Apache-brightgreen.svg?style=flat)](http://opensource.org/licenses/Apache-2.0)
+[![Build Status](https://github.com/linux-china/easy-random-junit5-extension/actions/workflows/main.yml/badge.svg)](https://github.com/linux-china/easy-random-junit5-extension/actions)
+[![Maven Central](https://img.shields.io/maven-central/v/org.mvnsearch/easy-random-junit5-extension)](https://repo1.maven.org/maven2/org/mvnsearch/easy-random-junit5-extension/)
+[![Project status](https://img.shields.io/badge/Project%20status-Maintenance-orange.svg)](https://img.shields.io/badge/Project%20status-Maintenance-orange.svg)
+
+</div>
 
 The easy random extension provides a test with randomly generated objects, including:
 

@@ -37,7 +37,10 @@ public class RecordFactory extends ObjenesisObjectFactory {
         }
         // create a random instance with random values
         try {
-            return getCanonicalConstructor(recordType).newInstance(randomValues);
+            final Constructor<T> canonicalConstructor = getCanonicalConstructor(recordType);
+            // change accessibility to public for nested Records
+            canonicalConstructor.setAccessible(true);
+            return canonicalConstructor.newInstance(randomValues);
         } catch (Exception e) {
             throw new ObjectCreationException("Unable to create a random instance of recordType " + recordType, e);
         }

@@ -44,7 +44,7 @@ public class RecordFactory extends ObjenesisObjectFactory {
             try {
                 // check bean validation annotation
                 final Field declaredField = recordType.getDeclaredField(recordComponent.getName());
-                if (declaredField.getAnnotations().length >= 1) {
+                if (declaredField.getAnnotations().length > 0) {
                     final Randomizer<?> randomizer = beanValidationHandlers.getRandomizer(declaredField);
                     if (randomizer != null) {
                         componentValue = randomizer.getRandomValue();

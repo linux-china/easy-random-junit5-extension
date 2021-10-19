@@ -104,7 +104,7 @@ public class EasyRandomExtension implements TestInstancePostProcessor, Parameter
     private final Map<String, Faker> fakerI18nMap = new HashMap<>();
 
     public EasyRandomExtension() {
-        EasyRandomParameters parameters = new EasyRandomParameters();
+        EasyRandomParameters parameters = new EasyRandomParameters().objectFactory(new RecordFactory());
         easyRandom = new EasyRandom(parameters);
         beanValidationHandlers = new BeanValidationRandomizerHandlers();
         beanValidationHandlers.init(parameters);

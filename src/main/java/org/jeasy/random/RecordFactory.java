@@ -1,8 +1,11 @@
 package org.jeasy.random;
 
+import org.jeasy.random.api.Randomizer;
 import org.jeasy.random.api.RandomizerContext;
+import org.jeasy.random.validation.BeanValidationRandomizerHandlers;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.RecordComponent;
 
 /**
@@ -14,13 +17,16 @@ import java.lang.reflect.RecordComponent;
 public class RecordFactory extends ObjenesisObjectFactory {
 
     private EasyRandom easyRandom;
+    private BeanValidationRandomizerHandlers beanValidationHandlers;
+
 
     @Override
     public <T> T createInstance(Class<T> type, RandomizerContext context) {
         if (easyRandom == null) {
             easyRandom = new EasyRandom(context.getParameters());
+            beanValidationHandlers = new BeanValidationRandomizerHandlers();
+            beanValidationHandlers.init(context.getParameters());
         }
-
         if (type.isRecord()) {
             return createRandomRecord(type);
         } else {
@@ -33,7 +39,24 @@ public class RecordFactory extends ObjenesisObjectFactory {
         RecordComponent[] recordComponents = recordType.getRecordComponents();
         Object[] randomValues = new Object[recordComponents.length];
         for (int i = 0; i < recordComponents.length; i++) {
-            randomValues[i] = easyRandom.nextObject(recordComponents[i].getType());
+            final RecordComponent recordComponent = recordComponents[i];
+            Object componentValue = null;
+            try {
+                // check bean validation annotation
+                final Field declaredField = recordType.getDeclaredField(recordComponent.getName());
+                if (declaredField.getAnnotations().length >= 1) {
+                    final Randomizer<?> randomizer = beanValidationHandlers.getRandomizer(declaredField);
+                    if (randomizer != null) {
+                        componentValue = randomizer.getRandomValue();
+                    }
+                }
+            } catch (Exception ignore) {
+
+            }
+            if (componentValue == null) {
+                componentValue = easyRandom.nextObject(recordComponent.getType());
+            }
+            randomValues[i] = componentValue;
         }
         // create a random instance with random values
         try {

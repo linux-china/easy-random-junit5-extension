@@ -26,7 +26,7 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           distribution: 'temurin'
-          java-version: '8'
+          java-version: '17'
           cache: 'maven'
       - name: Test with Maven
         run: mvn -B test --file pom.xml

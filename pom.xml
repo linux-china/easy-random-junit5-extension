@@ -16,9 +16,9 @@
         <java.version>17</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <junit5.version>5.8.1</junit5.version>
+        <junit5.version>5.8.2</junit5.version>
         <easy-random.version>5.0.0</easy-random.version>
-        <byte-buddy.version>1.11.21</byte-buddy.version>
+        <byte-buddy.version>1.12.12</byte-buddy.version>
     </properties>
 
     <developers>
@@ -76,7 +76,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.21.0</version>
+            <version>3.23.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -98,7 +98,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.10.1</version>
                 <configuration>
                     <parameters>true</parameters>
                 </configuration>
@@ -128,7 +128,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.8</version>
+                        <version>1.6.12</version>
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>

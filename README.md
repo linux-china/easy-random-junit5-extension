@@ -134,3 +134,4 @@ junit.jupiter.extensions.autodetection.enabled=true
 
 * Easy Random: https://github.com/j-easy/easy-random
 * RandomBeansExtension: https://glytching.github.io/junit-extensions/randomBeans
+* Instancio: a Java library for automating data setup in unit tests https://www.instancio.org/

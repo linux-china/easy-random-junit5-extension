@@ -30,7 +30,7 @@ public class AppTest {
 
     @Test
     public void testPhone(@Random @Phone String phone) {
-
+        System.out.println(phone);
     }
 
     @Test
@@ -57,4 +57,10 @@ public class AppTest {
     public void testRandomFullName(@Random @Pattern(regexp = "[A-Z][a-z]{6} [A-Z][a-z]{4}") String fullName) {
         assertThat(fullName).hasSize(13).contains(" ");
     }
+
+    @Test
+    public void testAccount(@Random Account account) {
+        System.out.println(account.getName());
+    }
+
 }

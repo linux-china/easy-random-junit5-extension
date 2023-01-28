@@ -74,6 +74,12 @@
             <version>${easy-random.version}</version>
         </dependency>
         <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>1.7.0</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
             <version>3.0.2</version>

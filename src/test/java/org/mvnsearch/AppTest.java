@@ -3,12 +3,13 @@ package org.mvnsearch;
 
 import com.github.javafaker.Address;
 import com.github.javafaker.Name;
+import jakarta.validation.constraints.Email;
+import net.datafaker.providers.base.Dog;
 import org.jeasy.random.EasyRandomExtension;
 import org.jeasy.random.Random;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
@@ -44,8 +45,14 @@ public class AppTest {
     }
 
     @Test
+    public void testDog(@Random Dog dog) {
+        System.out.println(dog.name());
+    }
+
+    @Test
     public void testRandomUser(@Random User user) {
         assertThat(user.getEmail()).contains("@");
+        System.out.println(user.getAvatar());
     }
 
     @Test

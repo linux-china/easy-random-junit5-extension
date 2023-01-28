@@ -3,6 +3,7 @@ package org.jeasy.random.validation;
 import net.bytebuddy.ByteBuddy;
 import org.jeasy.random.EasyRandomParameters;
 import org.jeasy.random.api.Randomizer;
+import org.jeasy.random.api.RandomizerRegistry;
 
 import javax.validation.constraints.*;
 import java.lang.annotation.Annotation;
@@ -19,11 +20,12 @@ import java.util.Map;
  * @author Random Beans
  * @author linux_china
  */
-public class BeanValidationRandomizerHandlers {
+public class BeanValidationRandomizerHandlers implements RandomizerRegistry {
     protected Map<Class<? extends Annotation>, BeanValidationAnnotationHandler> annotationHandlers = new HashMap<>();
 
     public void init(EasyRandomParameters parameters) {
         long seed = parameters.getSeed();
+        //javax validation
         annotationHandlers.put(AssertFalse.class, new AssertFalseAnnotationHandler());
         annotationHandlers.put(AssertTrue.class, new AssertTrueAnnotationHandler());
         annotationHandlers.put(Null.class, new NullAnnotationHandler());
@@ -43,6 +45,26 @@ public class BeanValidationRandomizerHandlers {
         annotationHandlers.put(NegativeOrZero.class, new NegativeOrZeroAnnotationHandler(seed));
         annotationHandlers.put(NotBlank.class, new NotBlankAnnotationHandler(seed));
         annotationHandlers.put(Email.class, new EmailAnnotationHandler(seed));
+        //jakarta validation
+        annotationHandlers.put(jakarta.validation.constraints.AssertFalse.class, new AssertFalseAnnotationHandler());
+        annotationHandlers.put(jakarta.validation.constraints.AssertTrue.class, new AssertTrueAnnotationHandler());
+        annotationHandlers.put(jakarta.validation.constraints.Null.class, new NullAnnotationHandler());
+        annotationHandlers.put(jakarta.validation.constraints.Future.class, new FutureAnnotationHandler(parameters));
+        annotationHandlers.put(jakarta.validation.constraints.FutureOrPresent.class, new FutureOrPresentAnnotationHandler(parameters));
+        annotationHandlers.put(jakarta.validation.constraints.Past.class, new PastAnnotationHandler(parameters));
+        annotationHandlers.put(jakarta.validation.constraints.PastOrPresent.class, new PastOrPresentAnnotationHandler(parameters));
+        annotationHandlers.put(jakarta.validation.constraints.Min.class, new MinMaxAnnotationHandler(seed));
+        annotationHandlers.put(jakarta.validation.constraints.Max.class, new MinMaxAnnotationHandler(seed));
+        annotationHandlers.put(jakarta.validation.constraints.DecimalMin.class, new DecimalMinMaxAnnotationHandler(seed));
+        annotationHandlers.put(jakarta.validation.constraints.DecimalMax.class, new DecimalMinMaxAnnotationHandler(seed));
+        annotationHandlers.put(jakarta.validation.constraints.Pattern.class, new PatternAnnotationHandler(seed));
+        annotationHandlers.put(jakarta.validation.constraints.Size.class, new SizeAnnotationHandler(parameters));
+        annotationHandlers.put(jakarta.validation.constraints.Positive.class, new PositiveAnnotationHandler(seed));
+        annotationHandlers.put(jakarta.validation.constraints.PositiveOrZero.class, new PositiveOrZeroAnnotationHandler(seed));
+        annotationHandlers.put(jakarta.validation.constraints.Negative.class, new NegativeAnnotationHandler(seed));
+        annotationHandlers.put(jakarta.validation.constraints.NegativeOrZero.class, new NegativeOrZeroAnnotationHandler(seed));
+        annotationHandlers.put(jakarta.validation.constraints.NotBlank.class, new NotBlankAnnotationHandler(seed));
+        annotationHandlers.put(jakarta.validation.constraints.Email.class, new EmailAnnotationHandler(seed));
     }
 
     public Randomizer<?> getRandomizer(final Parameter param) {
@@ -70,6 +92,11 @@ public class BeanValidationRandomizerHandlers {
                 return annotationHandler.getRandomizer(field2);
             }
         }
+        return null;
+    }
+
+    @Override
+    public Randomizer<?> getRandomizer(Class<?> type) {
         return null;
     }
 

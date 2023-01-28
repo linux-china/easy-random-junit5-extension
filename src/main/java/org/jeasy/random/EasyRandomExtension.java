@@ -1,6 +1,7 @@
 package org.jeasy.random;
 
 import com.github.javafaker.Faker;
+import net.datafaker.providers.base.BaseProviders;
 import org.jeasy.random.api.Randomizer;
 import org.jeasy.random.validation.BeanValidationRandomizerHandlers;
 import org.junit.jupiter.api.extension.*;
@@ -102,6 +103,7 @@ public class EasyRandomExtension implements TestInstancePostProcessor, Parameter
      * i18n faker map
      */
     private final Map<String, Faker> fakerI18nMap = new HashMap<>();
+    private final Map<String, net.datafaker.Faker> dataFakerI18nMap = new HashMap<>();
 
     public EasyRandomExtension() {
         EasyRandomParameters parameters = new EasyRandomParameters().objectFactory(new RecordFactory());
@@ -115,6 +117,11 @@ public class EasyRandomExtension implements TestInstancePostProcessor, Parameter
                     && typePackage.getName().equals("com.github.javafaker")
                     && method.getParameterCount() == 0
             ) {
+                fakerTypeHandlers.put(method.getReturnType(), method);
+            }
+        }
+        for (Method method : BaseProviders.class.getDeclaredMethods()) {
+            if (method.getParameterCount() == 0) {
                 fakerTypeHandlers.put(method.getReturnType(), method);
             }
         }
@@ -218,6 +225,8 @@ public class EasyRandomExtension implements TestInstancePostProcessor, Parameter
                     .collect(Collectors.toSet());
         } else if (targetClass.isAssignableFrom(Stream.class)) {
             return easyRandom.objects(parseInferredClass(targetType, annotation.type()), annotation.size());
+        } else if (fakerTypeHandlers.containsKey(targetClass)) {
+            return fakeValue(annotation, targetClass);
         } else {
             return easyRandom.nextObject(targetClass);
         }
@@ -261,6 +270,14 @@ public class EasyRandomExtension implements TestInstancePostProcessor, Parameter
     }
 
     public Object fakeValue(Random random, Class<?> fakeType) {
+        if (fakeType.getCanonicalName().startsWith("net.datafaker.")) {
+            return dataFakerValue(random, fakeType);
+        } else {
+            return javaFakerValue(random, fakeType);
+        }
+    }
+
+    public Object javaFakerValue(Random random, Class<?> fakeType) {
         // faker checker
         final Method handler = fakerTypeHandlers.get(fakeType);
         try {
@@ -271,6 +288,22 @@ public class EasyRandomExtension implements TestInstancePostProcessor, Parameter
                 fakerI18nMap.put(locale, new Faker(temp));
             }
             return handler.invoke(fakerI18nMap.get(locale));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private Object dataFakerValue(Random random, Class<?> fakeType) {
+        // faker checker
+        final Method handler = fakerTypeHandlers.get(fakeType);
+        try {
+            String locale = random.locale();
+            if (!dataFakerI18nMap.containsKey(locale)) {
+                final String[] parts = locale.split("[_\\-]+");
+                Locale temp = parts.length > 1 ? new Locale(parts[0], parts[1]) : new Locale(parts[0]);
+                dataFakerI18nMap.put(locale, new net.datafaker.Faker(temp));
+            }
+            return handler.invoke(dataFakerI18nMap.get(locale));
         } catch (Exception e) {
             return null;
         }

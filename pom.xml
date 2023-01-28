@@ -6,7 +6,7 @@
 
     <groupId>org.mvnsearch</groupId>
     <artifactId>easy-random-junit5-extension</artifactId>
-    <version>0.4.0</version>
+    <version>0.4.1-SNAPSHOT</version>
     <name>easy-random-junit5-extension</name>
     <description>JUnit 5 extension for easy-random</description>
     <url>https://github.com/linux-china/easy-random-junit5-extension</url>
@@ -77,6 +77,13 @@
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
             <version>3.0.2</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.0.Final</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>

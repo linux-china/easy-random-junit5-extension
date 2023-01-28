@@ -2,6 +2,7 @@ package org.mvnsearch;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Positive;
+import org.hibernate.validator.constraints.CreditCardNumber;
 
 import javax.validation.constraints.Pattern;
 
@@ -12,6 +13,8 @@ public class User {
     private String name;
     @Email
     private String email;
+    @CreditCardNumber
+    private String creditCardNumber;
 
     public Integer getId() {
         return id;
@@ -35,5 +38,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getCreditCardNumber() {
+        return creditCardNumber;
+    }
+
+    public void setCreditCardNumber(String creditCardNumber) {
+        this.creditCardNumber = creditCardNumber;
     }
 }

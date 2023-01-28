@@ -23,11 +23,10 @@
  */
 package org.jeasy.random.validation;
 
+import jakarta.validation.constraints.Pattern;
 import org.jeasy.random.api.Randomizer;
 import org.jeasy.random.randomizers.RegularExpressionRandomizer;
 import org.jeasy.random.util.ReflectionUtils;
-
-import jakarta.validation.constraints.Pattern;
 
 import java.lang.reflect.Field;
 import java.util.Random;
@@ -47,6 +46,9 @@ class JakartaPatternAnnotationHandler implements BeanValidationAnnotationHandler
                 .getAnnotation(field, Pattern.class);
 
         final String regex = patternAnnotation.regexp();
+        if (regex.isEmpty()) {
+            return null;
+        }
         if (fieldType.equals(String.class)) {
             return new RegularExpressionRandomizer(regex, random.nextLong());
         }

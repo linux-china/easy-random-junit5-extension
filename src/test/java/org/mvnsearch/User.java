@@ -1,8 +1,9 @@
 package org.mvnsearch;
 
-import javax.validation.constraints.Email;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Positive;
+
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Positive;
 
 public class User {
     @Positive

@@ -6,7 +6,7 @@
 
     <groupId>org.mvnsearch</groupId>
     <artifactId>easy-random-junit5-extension</artifactId>
-    <version>0.4.1-SNAPSHOT</version>
+    <version>0.5.0</version>
     <name>easy-random-junit5-extension</name>
     <description>JUnit 5 extension for easy-random</description>
     <url>https://github.com/linux-china/easy-random-junit5-extension</url>

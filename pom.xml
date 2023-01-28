@@ -6,7 +6,7 @@
 
     <groupId>org.mvnsearch</groupId>
     <artifactId>easy-random-junit5-extension</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
     <name>easy-random-junit5-extension</name>
     <description>JUnit 5 extension for easy-random</description>
     <url>https://github.com/linux-china/easy-random-junit5-extension</url>
@@ -137,7 +137,7 @@
                         <extensions>true</extensions>
                         <configuration>
                             <serverId>ossrh</serverId>
-                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
                         </configuration>
                     </plugin>
@@ -184,25 +184,6 @@
                                         <arg>loopback</arg>
                                     </gpgArguments>
                                 </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-toolchains-plugin</artifactId>
-                        <version>3.0.0</version>
-                        <configuration>
-                            <toolchains>
-                                <jdk>
-                                    <version>17</version>
-                                </jdk>
-                            </toolchains>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>toolchain</goal>
-                                </goals>
                             </execution>
                         </executions>
                     </plugin>

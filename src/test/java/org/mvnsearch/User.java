@@ -16,6 +16,9 @@ public class User {
     @CreditCardNumber
     private String creditCardNumber;
 
+    @Pattern(regexp = "(https?)://example.com/avatars/[a-f0-9]{10,20}")
+    private String avatar;
+
     public Integer getId() {
         return id;
     }
@@ -46,5 +49,13 @@ public class User {
 
     public void setCreditCardNumber(String creditCardNumber) {
         this.creditCardNumber = creditCardNumber;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

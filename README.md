@@ -50,7 +50,7 @@ Include following dependency in your pom.xml
   <dependency>
     <groupId>org.mvnsearch</groupId>
     <artifactId>easy-random-junit5-extension</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
     <!--<version>0.2.0</version> for Java 8 & 11-->
     <scope>test</scope>
   </dependency>

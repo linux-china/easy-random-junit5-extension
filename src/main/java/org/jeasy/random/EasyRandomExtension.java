@@ -1,7 +1,6 @@
 package org.jeasy.random;
 
 import com.github.javafaker.Faker;
-import net.datafaker.providers.base.BaseProviders;
 import org.jeasy.random.api.Randomizer;
 import org.jeasy.random.validation.BeanValidationRandomizerHandlers;
 import org.junit.jupiter.api.extension.*;
@@ -110,20 +109,31 @@ public class EasyRandomExtension implements TestInstancePostProcessor, Parameter
         easyRandom = new EasyRandom(parameters);
         beanValidationHandlers = new BeanValidationRandomizerHandlers();
         beanValidationHandlers.init(parameters);
-        // init Faker
-        for (Method method : Faker.class.getMethods()) {
-            final Package typePackage = method.getReturnType().getPackage();
-            if (typePackage != null
-                    && typePackage.getName().equals("com.github.javafaker")
-                    && method.getParameterCount() == 0
-            ) {
-                fakerTypeHandlers.put(method.getReturnType(), method);
+        // init Java Faker
+        try {
+            final Class<?> fakerClass = Class.forName("com.github.javafaker.Faker");
+            for (Method method : fakerClass.getMethods()) {
+                final Package typePackage = method.getReturnType().getPackage();
+                if (typePackage != null
+                        && typePackage.getName().equals("com.github.javafaker")
+                        && method.getParameterCount() == 0
+                ) {
+                    fakerTypeHandlers.put(method.getReturnType(), method);
+                }
             }
+        } catch (Exception ignore) {
+
         }
-        for (Method method : BaseProviders.class.getDeclaredMethods()) {
-            if (method.getParameterCount() == 0) {
-                fakerTypeHandlers.put(method.getReturnType(), method);
+        // init Data Faker
+        try {
+            final Class<?> baseProvidersClass = Class.forName("net.datafaker.providers.base.BaseProviders");
+            for (Method method : baseProvidersClass.getDeclaredMethods()) {
+                if (method.getParameterCount() == 0) {
+                    fakerTypeHandlers.put(method.getReturnType(), method);
+                }
             }
+        } catch (Exception ignore) {
+
         }
     }
 

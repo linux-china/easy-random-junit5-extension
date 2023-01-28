@@ -46,25 +46,41 @@ public class BeanValidationRandomizerHandlers implements RandomizerRegistry {
         annotationHandlers.put(NotBlank.class, new NotBlankAnnotationHandler(seed));
         annotationHandlers.put(Email.class, new EmailAnnotationHandler(seed));
         //jakarta validation
-        annotationHandlers.put(jakarta.validation.constraints.AssertFalse.class, new AssertFalseAnnotationHandler());
-        annotationHandlers.put(jakarta.validation.constraints.AssertTrue.class, new AssertTrueAnnotationHandler());
-        annotationHandlers.put(jakarta.validation.constraints.Null.class, new NullAnnotationHandler());
-        annotationHandlers.put(jakarta.validation.constraints.Future.class, new FutureAnnotationHandler(parameters));
-        annotationHandlers.put(jakarta.validation.constraints.FutureOrPresent.class, new FutureOrPresentAnnotationHandler(parameters));
-        annotationHandlers.put(jakarta.validation.constraints.Past.class, new PastAnnotationHandler(parameters));
-        annotationHandlers.put(jakarta.validation.constraints.PastOrPresent.class, new PastOrPresentAnnotationHandler(parameters));
-        annotationHandlers.put(jakarta.validation.constraints.Min.class, new MinMaxAnnotationHandler(seed));
-        annotationHandlers.put(jakarta.validation.constraints.Max.class, new MinMaxAnnotationHandler(seed));
-        annotationHandlers.put(jakarta.validation.constraints.DecimalMin.class, new DecimalMinMaxAnnotationHandler(seed));
-        annotationHandlers.put(jakarta.validation.constraints.DecimalMax.class, new DecimalMinMaxAnnotationHandler(seed));
-        annotationHandlers.put(jakarta.validation.constraints.Pattern.class, new PatternAnnotationHandler(seed));
-        annotationHandlers.put(jakarta.validation.constraints.Size.class, new SizeAnnotationHandler(parameters));
-        annotationHandlers.put(jakarta.validation.constraints.Positive.class, new PositiveAnnotationHandler(seed));
-        annotationHandlers.put(jakarta.validation.constraints.PositiveOrZero.class, new PositiveOrZeroAnnotationHandler(seed));
-        annotationHandlers.put(jakarta.validation.constraints.Negative.class, new NegativeAnnotationHandler(seed));
-        annotationHandlers.put(jakarta.validation.constraints.NegativeOrZero.class, new NegativeOrZeroAnnotationHandler(seed));
-        annotationHandlers.put(jakarta.validation.constraints.NotBlank.class, new NotBlankAnnotationHandler(seed));
-        annotationHandlers.put(jakarta.validation.constraints.Email.class, new EmailAnnotationHandler(seed));
+        try {
+            Class.forName("jakarta.validation.constraints.Pattern");
+            annotationHandlers.put(jakarta.validation.constraints.AssertFalse.class, new AssertFalseAnnotationHandler());
+            annotationHandlers.put(jakarta.validation.constraints.AssertTrue.class, new AssertTrueAnnotationHandler());
+            annotationHandlers.put(jakarta.validation.constraints.Null.class, new NullAnnotationHandler());
+            annotationHandlers.put(jakarta.validation.constraints.Future.class, new FutureAnnotationHandler(parameters));
+            annotationHandlers.put(jakarta.validation.constraints.FutureOrPresent.class, new FutureOrPresentAnnotationHandler(parameters));
+            annotationHandlers.put(jakarta.validation.constraints.Past.class, new PastAnnotationHandler(parameters));
+            annotationHandlers.put(jakarta.validation.constraints.PastOrPresent.class, new PastOrPresentAnnotationHandler(parameters));
+            annotationHandlers.put(jakarta.validation.constraints.Min.class, new JakartaMinMaxAnnotationHandler(seed));
+            annotationHandlers.put(jakarta.validation.constraints.Max.class, new JakartaMinMaxAnnotationHandler(seed));
+            annotationHandlers.put(jakarta.validation.constraints.DecimalMin.class, new JakartaDecimalMinMaxAnnotationHandler(seed));
+            annotationHandlers.put(jakarta.validation.constraints.DecimalMax.class, new JakartaDecimalMinMaxAnnotationHandler(seed));
+            annotationHandlers.put(jakarta.validation.constraints.Pattern.class, new JakartaPatternAnnotationHandler(seed));
+            annotationHandlers.put(jakarta.validation.constraints.Size.class, new JakartaSizeAnnotationHandler(parameters));
+            annotationHandlers.put(jakarta.validation.constraints.Positive.class, new PositiveAnnotationHandler(seed));
+            annotationHandlers.put(jakarta.validation.constraints.PositiveOrZero.class, new PositiveOrZeroAnnotationHandler(seed));
+            annotationHandlers.put(jakarta.validation.constraints.Negative.class, new NegativeAnnotationHandler(seed));
+            annotationHandlers.put(jakarta.validation.constraints.NegativeOrZero.class, new NegativeOrZeroAnnotationHandler(seed));
+            annotationHandlers.put(jakarta.validation.constraints.NotBlank.class, new NotBlankAnnotationHandler(seed));
+            annotationHandlers.put(jakarta.validation.constraints.Email.class, new EmailAnnotationHandler(seed));
+        } catch (Exception ignore) {
+        }
+        //hibernate validator
+        try {
+            Class.forName("org.hibernate.validator.constraints.URL");
+            annotationHandlers.put(org.hibernate.validator.constraints.URL.class, new URLAnnotationHandler());
+            annotationHandlers.put(org.hibernate.validator.constraints.ISBN.class, new IsbnAnnotationHandler(seed));
+            annotationHandlers.put(org.hibernate.validator.constraints.CreditCardNumber.class, new CreditCardNumberAnnotationHandler(seed));
+            annotationHandlers.put(org.hibernate.validator.constraints.EAN.class, new EANAnnotationHandler(seed));
+            annotationHandlers.put(org.hibernate.validator.constraints.UUID.class, new UUIDAnnotationHandler());
+            annotationHandlers.put(org.hibernate.validator.constraints.Length.class, new LengthAnnotationHandler(parameters));
+            annotationHandlers.put(org.hibernate.validator.constraints.Range.class, new RangeAnnotationHandler());
+        } catch (Exception ignore) {
+        }
     }
 
     public Randomizer<?> getRandomizer(final Parameter param) {
